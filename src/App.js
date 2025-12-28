@@ -83,7 +83,7 @@ export default function Portfolio() {
       <nav className="fixed top-0 left-0 right-0 bg-gray-100 shadow-md z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="text-2xl font-bold text-[#5F6F52]">Cynthia Liu</div>
+            <div className="text-2xl font-bold text-[#5F6F52]">Cynthia Liu's Personal Website</div>
             
             {/* Desktop Menu */}
             <div className="hidden md:flex space-x-8">
@@ -118,7 +118,7 @@ export default function Portfolio() {
       <section id="home" className="pt-16 min-h-screen flex items-center justify-center bg-[#BBC8B1]">
         <div className="text-center px-4">
           {/* Animated Name with Typewriter Effect */}
-          <h1 className="text-5xl md:text-7xl font-bold text-[#2F3B26] mb-16 h-20 min-h-[5rem]">
+          <h1 className="text-5xl md:text-8xl font-bold text-[#2F3B26] mb-24 h-20 min-h-[5rem]">
             {displayText}
             <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100 text-[#5F6F52]`}>|</span>
           </h1>
