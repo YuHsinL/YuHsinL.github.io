@@ -1,8 +1,36 @@
-import React, { useState } from 'react';
-import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Menu, X, Github, Mail, Phone, ExternalLink } from 'lucide-react';
 
 export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // State for Typewriter effect
+  const [displayText, setDisplayText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+  const fullName = "Cynthia Liu";
+
+  // Typewriter effect logic
+  useEffect(() => {
+    let currentIndex = 0;
+    const typingInterval = setInterval(() => {
+      if (currentIndex <= fullName.length) {
+        setDisplayText(fullName.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, 150); // Adjust speed here (150ms per letter)
+
+    // Blinking cursor interval
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 530);
+
+    return () => {
+      clearInterval(typingInterval);
+      clearInterval(cursorInterval);
+    };
+  }, []);
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -10,20 +38,38 @@ export default function Portfolio() {
     setIsMenuOpen(false);
   };
 
+  const projects = [
+    {
+      id: 1,
+      title: "Market Stimulation Game",
+      description: "This is a project I work with my other teammate for the Programming and Web Scraping course.",
+      link: "https://www.youtube.com/watch?v=fdVVbSM-xtE",
+      videoId: "fdVVbSM-xtE"
+    },
+    {
+      id: 2,
+      title: "Bomberman",
+      description: "This is a project I work with my teammates for the Introduction to Computer course. It is a game created by Jack language.",
+      link: "https://www.youtube.com/watch?v=t7gM4wY1O0g",
+      videoId: "t7gM4wY1O0g"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Fixed Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+      {/* Changed background to bg-gray-100 to match Portfolio section */}
+      <nav className="fixed top-0 left-0 right-0 bg-gray-100 shadow-md z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="text-2xl font-bold text-gray-800">Cynthia Liu</div>
+            <div className="text-2xl font-bold text-[#5F6F52]">Cynthia Liu</div>
             
             {/* Desktop Menu */}
             <div className="hidden md:flex space-x-8">
-              <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-blue-600 transition">Home</button>
-              <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-blue-600 transition">About</button>
-              <button onClick={() => scrollToSection('portfolio')} className="text-gray-700 hover:text-blue-600 transition">Portfolio</button>
-              <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-blue-600 transition">Contact</button>
+              <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-[#5F6F52] transition">Home</button>
+              <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-[#5F6F52] transition">About</button>
+              <button onClick={() => scrollToSection('portfolio')} className="text-gray-700 hover:text-[#5F6F52] transition">Portfolio</button>
+              <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-[#5F6F52] transition">Contact</button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -38,27 +84,31 @@ export default function Portfolio() {
           {/* Mobile Menu */}
           {isMenuOpen && (
             <div className="md:hidden pb-4">
-              <button onClick={() => scrollToSection('home')} className="block w-full text-left py-2 text-gray-700 hover:text-blue-600">Home</button>
-              <button onClick={() => scrollToSection('about')} className="block w-full text-left py-2 text-gray-700 hover:text-blue-600">About</button>
-              <button onClick={() => scrollToSection('portfolio')} className="block w-full text-left py-2 text-gray-700 hover:text-blue-600">Portfolio</button>
-              <button onClick={() => scrollToSection('contact')} className="block w-full text-left py-2 text-gray-700 hover:text-blue-600">Contact</button>
+              <button onClick={() => scrollToSection('home')} className="block w-full text-left py-2 text-gray-700 hover:text-[#5F6F52]">Home</button>
+              <button onClick={() => scrollToSection('about')} className="block w-full text-left py-2 text-gray-700 hover:text-[#5F6F52]">About</button>
+              <button onClick={() => scrollToSection('portfolio')} className="block w-full text-left py-2 text-gray-700 hover:text-[#5F6F52]">Portfolio</button>
+              <button onClick={() => scrollToSection('contact')} className="block w-full text-left py-2 text-gray-700 hover:text-[#5F6F52]">Contact</button>
             </div>
           )}
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="pt-16 min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+      <section id="home" className="pt-16 min-h-screen flex items-center justify-center bg-[#BBC8B1]">
         <div className="text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-4">
-            Cynthia Liu
+          {/* Animated Name with Typewriter Effect */}
+          <h1 className="text-5xl md:text-7xl font-bold text-[#2F3B26] mb-16 h-20">
+            {displayText}
+            <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100 text-[#5F6F52]`}>|</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8">
+          
+          <p className="text-xl md:text-2xl text-black mb-16 font-medium">
             Computer Science and Information Engineering Freshman @ National Taiwan University
           </p>
+          
           <button 
             onClick={() => scrollToSection('portfolio')}
-            className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg hover:bg-blue-700 transition"
+            className="bg-[#5F6F52] text-white px-8 py-3 rounded-full text-lg hover:bg-[#4a5740] transition shadow-lg"
           >
             View My Work
           </button>
@@ -66,10 +116,10 @@ export default function Portfolio() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 px-4">
+      <section id="about" className="py-20 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-800 mb-8 text-center">About Me</h2>
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-4xl font-bold text-[#5F6F52] mb-8 text-center">About Me</h2>
+          <div className="bg-gray-50 rounded-lg shadow-lg p-8 border-t-4 border-[#5F6F52]">
             <p className="text-lg text-gray-700 mb-4">
               Hello! I'm a Computer Science freshman at National Taiwan University.
               I am only half way through my first year, but I'm already having lots of fun in various courses.
@@ -84,19 +134,38 @@ export default function Portfolio() {
       {/* Portfolio Section */}
       <section id="portfolio" className="py-20 px-4 bg-gray-100">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">My Portfolio</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2].map((item) => (
-              <div key={item} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-                <div className="h-48 bg-gradient-to-br from-blue-400 to-purple-500"></div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Project {item}</h3>
-                  <p className="text-gray-600 mb-4">
-                    A brief description of this amazing project and what technologies were used.
+          <h2 className="text-4xl font-bold text-[#5F6F52] mb-12 text-center">My Portfolio</h2>
+          
+          {/* Grid Layout Update: 
+              - Removed lg:grid-cols-3
+              - Changed to md:grid-cols-2 for balanced spacing
+              - Added gap-10 for slightly more breathing room
+          */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {projects.map((project) => (
+              <div key={project.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col h-full border border-gray-200">
+                <div className="h-64 bg-black shrink-0 relative group">
+                  <img 
+                    src={`https://img.youtube.com/vi/${project.videoId}/maxresdefault.jpg`} 
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                </div>
+                
+                <div className="p-8 flex flex-col flex-grow">
+                  <h3 className="text-2xl font-bold text-[#5F6F52] mb-3">{project.title}</h3>
+                  <p className="text-gray-600 mb-6 flex-grow text-lg">
+                    {project.description}
                   </p>
-                  <button className="text-blue-600 hover:text-blue-800 font-semibold">
-                    Learn More →
-                  </button>
+                  <a 
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#5F6F52] hover:text-[#4a5740] font-bold inline-block mt-auto flex items-center gap-2 text-lg"
+                  >
+                    Learn More <ExternalLink size={20} />
+                  </a>
                 </div>
               </div>
             ))}
@@ -105,29 +174,40 @@ export default function Portfolio() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-4">
+      <section id="contact" className="py-20 px-4 bg-[#5F6F52]">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-gray-800 mb-8">Get In Touch</h2>
-          <p className="text-lg text-gray-700 mb-8">
+          <h2 className="text-4xl font-bold text-white mb-8">Get In Touch</h2>
+          <p className="text-lg text-blue-50 mb-12">
             I'm always open to new opportunities and collaborations. Feel free to reach out!
           </p>
-          <div className="flex justify-center space-x-6">
-            <a href="https://github.com/YuHsinL" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-blue-600 transition">
-              <Github size={32} />
+          
+          <div className="flex flex-col items-center space-y-6">
+            
+            {/* Phone */}
+            <div className="flex items-center space-x-3 text-white text-lg">
+              <Phone size={24} />
+              <span>0905525341</span>
+            </div>
+
+            {/* GitHub */}
+            <a href="https://github.com/YuHsinL" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-white text-lg hover:text-[#BBC8B1] transition">
+              <Github size={24} />
+              <span>github.com/YuHsinL</span>
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-blue-600 transition">
-              <Linkedin size={32} />
+
+            {/* Email */}
+            <a href="mailto:cynthialiu0310@gmail.com" className="flex items-center space-x-3 text-white text-lg hover:text-[#BBC8B1] transition">
+              <Mail size={24} />
+              <span>cynthialiu0310@gmail.com</span>
             </a>
-            <a href="mailto:your.email@example.com" className="text-gray-700 hover:text-blue-600 transition">
-              <Mail size={32} />
-            </a>
+            
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 text-center">
-        <p>&copy; 2025 Yu-Hsin Lin. All rights reserved.</p>
+      <footer className="bg-[#4a5740] text-white py-8 text-center">
+        <p>&copy; 2025 Yu-Hsin Liu. All rights reserved.</p>
       </footer>
     </div>
   );
