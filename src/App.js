@@ -6,30 +6,52 @@ export default function Portfolio() {
   
   // State for Typewriter effect
   const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
   const fullName = "Cynthia Liu";
+  
+  // Configuration for animation speeds (in milliseconds)
+  const typingSpeed = 150;
+  const deletingSpeed = 75;
+  const pauseDuration = 2000; // How long to wait after typing the full name
 
   // Typewriter effect logic
   useEffect(() => {
-    let currentIndex = 0;
-    const typingInterval = setInterval(() => {
-      if (currentIndex <= fullName.length) {
-        setDisplayText(fullName.slice(0, currentIndex));
-        currentIndex++;
-      } else {
-        clearInterval(typingInterval);
-      }
-    }, 150); // Adjust speed here (150ms per letter)
+    let timer;
 
-    // Blinking cursor interval
+    if (isDeleting) {
+      // Deleting Logic
+      if (displayText.length > 0) {
+        timer = setTimeout(() => {
+          setDisplayText(fullName.slice(0, displayText.length - 1));
+        }, deletingSpeed);
+      } else {
+        // Finished deleting, switch to typing mode
+        setIsDeleting(false);
+      }
+    } else {
+      // Typing Logic
+      if (displayText.length < fullName.length) {
+        timer = setTimeout(() => {
+          setDisplayText(fullName.slice(0, displayText.length + 1));
+        }, typingSpeed);
+      } else {
+        // Finished typing, pause before deleting
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, pauseDuration);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting]);
+
+  // Blinking cursor independent of typing
+  useEffect(() => {
     const cursorInterval = setInterval(() => {
       setShowCursor(prev => !prev);
     }, 530);
-
-    return () => {
-      clearInterval(typingInterval);
-      clearInterval(cursorInterval);
-    };
+    return () => clearInterval(cursorInterval);
   }, []);
 
   const scrollToSection = (id) => {
@@ -58,7 +80,6 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Fixed Navigation Bar */}
-      {/* Changed background to bg-gray-100 to match Portfolio section */}
       <nav className="fixed top-0 left-0 right-0 bg-gray-100 shadow-md z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -97,7 +118,7 @@ export default function Portfolio() {
       <section id="home" className="pt-16 min-h-screen flex items-center justify-center bg-[#BBC8B1]">
         <div className="text-center px-4">
           {/* Animated Name with Typewriter Effect */}
-          <h1 className="text-5xl md:text-7xl font-bold text-[#2F3B26] mb-16 h-20">
+          <h1 className="text-5xl md:text-7xl font-bold text-[#2F3B26] mb-16 h-20 min-h-[5rem]">
             {displayText}
             <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100 text-[#5F6F52]`}>|</span>
           </h1>
@@ -136,11 +157,6 @@ export default function Portfolio() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-[#5F6F52] mb-12 text-center">My Portfolio</h2>
           
-          {/* Grid Layout Update: 
-              - Removed lg:grid-cols-3
-              - Changed to md:grid-cols-2 for balanced spacing
-              - Added gap-10 for slightly more breathing room
-          */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {projects.map((project) => (
               <div key={project.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col h-full border border-gray-200">
